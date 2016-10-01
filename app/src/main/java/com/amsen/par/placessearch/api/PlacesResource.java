@@ -21,6 +21,10 @@ import rx.schedulers.Schedulers;
 public class PlacesResource {
     private final static String API_KEY = "<YOUR_API_KEY>";
 
+    private OkHttpClient client = new OkHttpClient();
+    private Moshi moshi = new Moshi.Builder().build();
+    private JsonAdapter<PlacesResponse> adapter = moshi.adapter(PlacesResponse.class);
+
     public Observable<List<Prediction>> getPredictions(String query) {
         return fromApi(query)
                 .subscribeOn(Schedulers.io());
@@ -30,10 +34,6 @@ public class PlacesResource {
         return Observable.create(subscriber -> {
             if(API_KEY.contains("YOUR_API_KEY"))
                 throw new RuntimeException("Set your API key for this example!");
-
-            OkHttpClient client = new OkHttpClient();
-            Moshi moshi = new Moshi.Builder().build();
-            JsonAdapter<PlacesResponse> adapter = moshi.adapter(PlacesResponse.class);
 
             Request request = new Request.Builder()
                     .url("https://maps.googleapis.com/maps/api/place/autocomplete/json?input=" + query + "&key=" + API_KEY)
