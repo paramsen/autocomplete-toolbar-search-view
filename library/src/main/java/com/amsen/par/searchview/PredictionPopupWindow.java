@@ -1,4 +1,4 @@
-package com.amsen.par.searchview.library;
+package com.amsen.par.searchview;
 
 import android.view.View;
 import android.widget.PopupWindow;
