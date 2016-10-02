@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="utf-8"?>
+<TextView xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/prediction1"
+    android:layout_width="match_parent"
+    android:layout_height="60dp"
+    android:background="@drawable/prediction_item_bg_separator"
+    android:ellipsize="marquee"
+    android:gravity="start|center_vertical"
+    android:lines="1"
+    android:padding="10dp"
+    android:text="Bajs, Sydney, Australa"
+    android:textColor="#777"
+    android:textSize="18sp" />

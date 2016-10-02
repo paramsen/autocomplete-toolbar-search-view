@@ -1,61 +1,31 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:orientation="vertical">
+    android:layout_height="match_parent">
 
-    <TextView
-        android:id="@+id/prediction1"
+    <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="50dp"
-        android:ellipsize="marquee"
-        android:gravity="start|center_vertical"
-        android:lines="1"
-        android:padding="10dp"
-        android:textSize="18sp"
-        android:text="Bajs, Sydney, Australa" />
+        android:layout_height="match_parent"
+        android:orientation="vertical">
 
-    <TextView
-        android:id="@+id/prediction2"
-        android:layout_width="match_parent"
-        android:layout_height="50dp"
-        android:ellipsize="marquee"
-        android:gravity="start|center_vertical"
-        android:lines="1"
-        android:padding="10dp"
-        android:textSize="18sp"
-        android:text="Bajs, Sydney, Australa" />
+        <include
+            android:id="@+id/prediction1"
+            layout="@layout/view_prediciton" />
 
-    <TextView
-        android:id="@+id/prediction3"
-        android:layout_width="match_parent"
-        android:layout_height="50dp"
-        android:ellipsize="marquee"
-        android:gravity="start|center_vertical"
-        android:lines="1"
-        android:padding="10dp"
-        android:textSize="18sp"
-        android:text="Bajs, Sydney, Australa" />
+        <include
+            android:id="@+id/prediction2"
+            layout="@layout/view_prediciton" />
 
-    <TextView
-        android:id="@+id/prediction4"
-        android:layout_width="match_parent"
-        android:layout_height="50dp"
-        android:ellipsize="marquee"
-        android:gravity="start|center_vertical"
-        android:lines="1"
-        android:padding="10dp"
-        android:textSize="18sp"
-        android:text="Bajs, Sydney, Australa" />
+        <include
+            android:id="@+id/prediction3"
+            layout="@layout/view_prediciton" />
 
-    <TextView
-        android:id="@+id/prediction5"
-        android:layout_width="match_parent"
-        android:layout_height="50dp"
-        android:ellipsize="marquee"
-        android:gravity="start|center_vertical"
-        android:lines="1"
-        android:padding="10dp"
-        android:textSize="18sp"
-        android:text="Bajs, Sydney, Australa" />
-</LinearLayout>
+        <include
+            android:id="@+id/prediction4"
+            layout="@layout/view_prediciton" />
+
+        <include
+            android:id="@+id/prediction5"
+            layout="@layout/view_prediciton" />
+    </LinearLayout>
+</ScrollView>

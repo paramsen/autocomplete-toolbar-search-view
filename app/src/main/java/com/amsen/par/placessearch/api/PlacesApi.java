@@ -18,7 +18,7 @@ import rx.schedulers.Schedulers;
 /**
  * @author Pär Amsen 2016
  */
-public class PlacesResource {
+public class PlacesApi {
     private final static String API_KEY = "<YOUR_API_KEY>";
 
     private OkHttpClient client = new OkHttpClient();
