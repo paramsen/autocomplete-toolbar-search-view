@@ -19,8 +19,7 @@ import rx.schedulers.Schedulers;
  * @author Pär Amsen 2016
  */
 public class PlacesApi {
-    //private final static String API_KEY = "<YOUR_API_KEY>";AIzaSyBtuM4Vw35jD9hW_uMx50yQw1sh-LDVZEw
-    private final static String API_KEY = "AIzaSyBtuM4Vw35jD9hW_uMx50yQw1sh-LDVZEw";
+    private final static String API_KEY = "<YOUR_API_KEY>";
 
     private OkHttpClient client = new OkHttpClient();
     private Moshi moshi = new Moshi.Builder().build();
