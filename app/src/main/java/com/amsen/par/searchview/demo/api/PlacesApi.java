@@ -1,7 +1,7 @@
-package com.amsen.par.placessearch.demo.api;
+package com.amsen.par.searchview.demo.api;
 
-import com.amsen.par.placessearch.demo.api.response.PlacesResponse;
-import com.amsen.par.placessearch.demo.model.Prediction;
+import com.amsen.par.searchview.demo.api.response.PlacesResponse;
+import com.amsen.par.searchview.demo.model.Prediction;
 import com.squareup.moshi.JsonAdapter;
 import com.squareup.moshi.Moshi;
 
@@ -19,7 +19,8 @@ import rx.schedulers.Schedulers;
  * @author Pär Amsen 2016
  */
 public class PlacesApi {
-    private final static String API_KEY = "<YOUR_API_KEY>";
+    //private final static String API_KEY = "<YOUR_API_KEY>";AIzaSyBtuM4Vw35jD9hW_uMx50yQw1sh-LDVZEw
+    private final static String API_KEY = "AIzaSyBtuM4Vw35jD9hW_uMx50yQw1sh-LDVZEw";
 
     private OkHttpClient client = new OkHttpClient();
     private Moshi moshi = new Moshi.Builder().build();
@@ -32,7 +33,7 @@ public class PlacesApi {
 
     private Observable<List<Prediction>> fromApi(String query) {
         return Observable.create(subscriber -> {
-            if(API_KEY.contains("YOUR_API_KEY"))
+            if (API_KEY.contains("YOUR_API_KEY"))
                 throw new RuntimeException("Set your API key for this example!");
 
             Request request = new Request.Builder()

@@ -1,6 +1,6 @@
-package com.amsen.par.placessearch.demo.api.response;
+package com.amsen.par.searchview.demo.api.response;
 
-import com.amsen.par.placessearch.demo.model.Prediction;
+import com.amsen.par.searchview.demo.model.Prediction;
 
 import java.util.List;
 

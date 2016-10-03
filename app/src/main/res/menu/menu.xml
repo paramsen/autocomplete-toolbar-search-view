@@ -3,7 +3,7 @@
     xmlns:app="http://schemas.android.com/apk/res-auto">
     <item
         android:id="@+id/action_search"
-        app:actionViewClass="com.amsen.par.placessearch.view.view.PlaceSearchView"
+        app:actionViewClass="com.amsen.par.searchview.AutoCompleteSearchView"
         android:icon="@android:drawable/ic_menu_search"
         app:showAsAction="ifRoom|collapseActionView"
         android:title="Search" />

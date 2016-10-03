@@ -1,4 +1,4 @@
-package com.amsen.par.placessearch.demo.model;
+package com.amsen.par.searchview.demo.model;
 
 import java.util.List;
 
