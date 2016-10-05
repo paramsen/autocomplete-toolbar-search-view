@@ -1,6 +1,30 @@
 apply plugin: 'com.android.library'
 apply plugin: 'me.tatarka.retrolambda'
 
+ext {
+    bintrayRepo = 'maven'
+    bintrayName = 'searchview'
+
+    publishedGroupId = 'com.amsen.par'
+    libraryName = 'SearchView'
+    artifact = 'searchview'
+
+    libraryDescription = 'Android SearchView with Autocompletion & Material Design'
+
+    siteUrl = 'https://github.com/paramsen/autocomplete-toolbar-search-view'
+    gitUrl = 'https://github.com/paramsen/autocomplete-toolbar-search-view.git'
+
+    libraryVersion = '0.5'
+
+    developerId = 'paramsen'
+    developerName = 'Pär Nils Amsen'
+    developerEmail = 'par.nils.amsen@gmail.com'
+
+    licenseName = 'The Apache Software License, Version 2.0'
+    licenseUrl = 'http://www.apache.org/licenses/LICENSE-2.0.txt'
+    allLicenses = ["Apache-2.0"]
+}
+
 android {
     compileSdkVersion 24
     buildToolsVersion "24.0.2"
