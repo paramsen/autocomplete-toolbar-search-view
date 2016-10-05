@@ -2,7 +2,7 @@ apply plugin: 'com.android.library'
 apply plugin: 'me.tatarka.retrolambda'
 
 ext {
-    bintrayRepo = 'maven'
+    bintrayRepo = 'com.amsen.par'
     bintrayName = 'searchview'
 
     publishedGroupId = 'com.amsen.par'
@@ -14,7 +14,7 @@ ext {
     siteUrl = 'https://github.com/paramsen/autocomplete-toolbar-search-view'
     gitUrl = 'https://github.com/paramsen/autocomplete-toolbar-search-view.git'
 
-    libraryVersion = '0.5'
+    libraryVersion = '0.5.5'
 
     developerId = 'paramsen'
     developerName = 'Pär Nils Amsen'
@@ -33,7 +33,7 @@ android {
         minSdkVersion 16
         targetSdkVersion 24
         versionCode 1
-        versionName "0.5"
+        versionName "0.5.5"
 
         testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
 
@@ -59,3 +59,6 @@ dependencies {
     compile 'com.android.support:appcompat-v7:24.2.1'
     compile 'com.android.support:recyclerview-v7:24.2.1'
 }
+
+apply from: 'https://raw.githubusercontent.com/nuuneoi/JCenter/master/installv1.gradle'
+apply from: 'https://raw.githubusercontent.com/nuuneoi/JCenter/master/bintrayv1.gradle'

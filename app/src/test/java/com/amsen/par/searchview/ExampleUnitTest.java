@@ -1,8 +1,8 @@
-package com.amsen.par.placessearch;
+package com.amsen.par.searchview;
 
 import org.junit.Test;
 
-import static org.junit.Assert.*;
+import static org.junit.Assert.assertEquals;
 
 /**
  * Example local unit prediction_popup_bg, which will execute on the development machine (host).

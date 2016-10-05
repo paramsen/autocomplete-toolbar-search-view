@@ -8,26 +8,24 @@ import android.widget.Toast;
 
 import com.amsen.par.searchview.AutoCompleteSearchView;
 import com.amsen.par.searchview.demo.R;
-import com.amsen.par.searchview.demo.api.PlacesApi;
-import com.amsen.par.searchview.demo.model.Prediction;
+import com.amsen.par.searchview.demo.api.MockApi;
+import com.amsen.par.searchview.prediction.Prediction;
 
 import java.util.ArrayList;
 import java.util.List;
-
-import rx.android.schedulers.AndroidSchedulers;
 
 /**
  * @author Pär Amsen 2016
  */
 public class MainActivity extends AppCompatActivity {
-    private PlacesApi api;
+    private MockApi api;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        api = new PlacesApi();
+        api = new MockApi();
     }
 
     @Override
@@ -47,10 +45,10 @@ public class MainActivity extends AppCompatActivity {
 
             @Override
             public boolean onQueryTextChange(String newText) {
-                api.getPredictions(newText)
-                        .observeOn(AndroidSchedulers.mainThread())
-                        .map(MainActivity.this::toSearchViewPredictions)
-                        .subscribe(searchView::applyPredictions, Throwable::printStackTrace);
+                List<String> rawPredictions = api.getPredictions(newText);
+                List<Prediction> predictions = toSearchViewPredictions(rawPredictions);
+
+                searchView.applyPredictions(predictions);
 
                 return true;
             }
@@ -58,11 +56,11 @@ public class MainActivity extends AppCompatActivity {
         return true;
     }
 
-    private List<com.amsen.par.searchview.prediction.Prediction> toSearchViewPredictions(List<Prediction> predictions) {
-        List<com.amsen.par.searchview.prediction.Prediction> forSearchView = new ArrayList<>();
+    private List<com.amsen.par.searchview.prediction.Prediction> toSearchViewPredictions(List<String> predictions) {
+        List<Prediction> forSearchView = new ArrayList<>();
 
-        for (Prediction prediction : predictions) {
-            forSearchView.add(new com.amsen.par.searchview.prediction.Prediction(prediction.id.hashCode(), prediction.description));
+        for (String prediction : predictions) {
+            forSearchView.add(new Prediction(prediction.hashCode(), prediction)); //My data doesn't have ID:s, so I use the unique hash sum to identify each item!
         }
 
         return forSearchView;
