@@ -23,6 +23,7 @@ public class AutoCompleteSearchView extends SearchView {
     private ViewGroup appBar;
     private PredictionPopupWindow popup;
     private OnPredictionClickListener listener;
+    private OnQueryTextListener externalListener;
 
     public AutoCompleteSearchView(Context context) {
         super(context);
@@ -47,10 +48,34 @@ public class AutoCompleteSearchView extends SearchView {
         appBar = ViewUtils.findActionBar(activity);
 
         setOnCloseListener(() -> {
-            popup.dismiss();
+            dismissPopup();
             popup = null;
 
             return false;
+        });
+
+        super.setOnQueryTextListener(new OnQueryTextListener() {
+            @Override
+            public boolean onQueryTextSubmit(String query) {
+                if(externalListener != null) {
+                    return externalListener.onQueryTextSubmit(query);
+                }
+
+                return true;
+            }
+
+            @Override
+            public boolean onQueryTextChange(String newText) {
+                if(externalListener != null) {
+                    externalListener.onQueryTextChange(newText);
+                }
+
+                if(newText.length() == 0) {
+                    dismissPopup();
+                }
+
+                return true;
+            }
         });
     }
 
@@ -67,8 +92,19 @@ public class AutoCompleteSearchView extends SearchView {
         showPopup();
     }
 
+    @Override
+    public void setOnQueryTextListener(OnQueryTextListener listener) {
+        externalListener = listener;
+    }
+
     public void showPopup() {
         popup.showAsDropDown(appBar);
+    }
+
+    public void dismissPopup() {
+        if(popup != null) {
+            popup.dismiss();
+        }
     }
 
     public void setOnPredictionClickListener(OnPredictionClickListener listener) {
