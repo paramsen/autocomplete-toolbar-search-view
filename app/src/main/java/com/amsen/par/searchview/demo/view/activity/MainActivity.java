@@ -4,6 +4,7 @@ import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.SearchView;
 import android.view.Menu;
+import android.view.MenuItem;
 import android.widget.Toast;
 
 import com.amsen.par.searchview.AutoCompleteSearchView;
@@ -32,9 +33,12 @@ public class MainActivity extends AppCompatActivity {
     public boolean onCreateOptionsMenu(Menu menu) {
         getMenuInflater().inflate(R.menu.menu, menu);
 
-        AutoCompleteSearchView searchView = (AutoCompleteSearchView) menu.findItem(R.id.action_search).getActionView();
+        MenuItem searchViewItem = menu.findItem(R.id.action_search);
+        AutoCompleteSearchView searchView = (AutoCompleteSearchView) searchViewItem.getActionView();
+
         searchView.setOnPredictionClickListener((position, prediction) -> {
             Toast.makeText(this, String.format("clicked [position:%d, value:%s, displayString:%s]", position, prediction.value, prediction.displayString), Toast.LENGTH_SHORT).show();
+            searchViewItem.collapseActionView();
         });
 
         searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {

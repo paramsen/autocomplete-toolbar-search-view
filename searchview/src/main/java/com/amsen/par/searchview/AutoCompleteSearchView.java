@@ -4,6 +4,7 @@ import android.app.Activity;
 import android.content.Context;
 import android.support.v7.widget.SearchView;
 import android.util.AttributeSet;
+import android.view.View;
 import android.view.ViewGroup;
 
 import com.amsen.par.searchview.prediction.OnPredictionClickListener;
@@ -25,19 +26,16 @@ public class AutoCompleteSearchView extends SearchView {
 
     public AutoCompleteSearchView(Context context) {
         super(context);
-
         init(context);
     }
 
     public AutoCompleteSearchView(Context context, AttributeSet attrs) {
         super(context, attrs);
-
         init(context);
     }
 
     public AutoCompleteSearchView(Context context, AttributeSet attrs, int defStyleAttr) {
         super(context, attrs, defStyleAttr);
-
         init(context);
     }
 
