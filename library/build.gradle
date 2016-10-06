@@ -1,6 +1,9 @@
 apply plugin: 'com.android.library'
 apply plugin: 'me.tatarka.retrolambda'
 
+def VERSION_NAME = '0.6.5'
+def VERSION_CODE = 1
+
 ext {
     bintrayRepo = 'com.amsen.par'
     bintrayName = 'searchview'
@@ -14,7 +17,7 @@ ext {
     siteUrl = 'https://github.com/paramsen/autocomplete-toolbar-search-view'
     gitUrl = 'https://github.com/paramsen/autocomplete-toolbar-search-view.git'
 
-    libraryVersion = '0.5.5'
+    libraryVersion = VERSION_NAME
 
     developerId = 'paramsen'
     developerName = 'Pär Nils Amsen'
@@ -32,8 +35,8 @@ android {
     defaultConfig {
         minSdkVersion 16
         targetSdkVersion 24
-        versionCode 1
-        versionName "0.5.5"
+        versionCode VERSION_CODE
+        versionName VERSION_NAME
 
         testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
 

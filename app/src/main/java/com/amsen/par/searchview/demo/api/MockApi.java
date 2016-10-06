@@ -19,7 +19,7 @@ public class MockApi {
 
     /**
      *  Generate an array of incrementing char sequences;
-     *  for args lastChar=a amout=5;
+     *  for args lastChar=a amount=5;
      *  {a, ab, abc, abcd, abcde} is the result
      */
     protected List<String> generatePredictions(int amountOfResults, String query) {

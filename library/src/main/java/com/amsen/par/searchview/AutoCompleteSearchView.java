@@ -2,10 +2,8 @@ package com.amsen.par.searchview;
 
 import android.app.Activity;
 import android.content.Context;
-import android.content.ContextWrapper;
 import android.support.v7.widget.SearchView;
 import android.util.AttributeSet;
-import android.view.View;
 import android.view.ViewGroup;
 
 import com.amsen.par.searchview.prediction.OnPredictionClickListener;
@@ -57,7 +55,7 @@ public class AutoCompleteSearchView extends SearchView {
         super.setOnQueryTextListener(new OnQueryTextListener() {
             @Override
             public boolean onQueryTextSubmit(String query) {
-                if(externalListener != null) {
+                if (externalListener != null) {
                     return externalListener.onQueryTextSubmit(query);
                 }
 
@@ -66,11 +64,11 @@ public class AutoCompleteSearchView extends SearchView {
 
             @Override
             public boolean onQueryTextChange(String newText) {
-                if(externalListener != null) {
+                if (externalListener != null) {
                     externalListener.onQueryTextChange(newText);
                 }
 
-                if(newText.length() == 0) {
+                if (newText.length() == 0) {
                     dismissPopup();
                 }
 
@@ -83,7 +81,7 @@ public class AutoCompleteSearchView extends SearchView {
         if (popup == null) {
             popup = new PredictionPopupWindow(getContext());
 
-            if(listener != null) {
+            if (listener != null) {
                 popup.setOnPredictionClickListener(listener);
             }
         }
@@ -92,22 +90,33 @@ public class AutoCompleteSearchView extends SearchView {
         showPopup();
     }
 
+    public void dismissPredictionView() {
+        dismissPopup();
+    }
+
     @Override
     public void setOnQueryTextListener(OnQueryTextListener listener) {
         externalListener = listener;
     }
 
-    public void showPopup() {
+    private void showPopup() {
         popup.showAsDropDown(appBar);
     }
 
-    public void dismissPopup() {
-        if(popup != null) {
+    private void dismissPopup() {
+        if (popup != null) {
             popup.dismiss();
         }
     }
 
     public void setOnPredictionClickListener(OnPredictionClickListener listener) {
         this.listener = listener;
+    }
+
+    @Override
+    protected void onDetachedFromWindow() {
+        dismissPopup();
+
+        super.onDetachedFromWindow();
     }
 }
