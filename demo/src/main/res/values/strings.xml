@@ -1,4 +1,4 @@
 <resources>
-    <string name="app_name">Places Search</string>
+    <string name="app_name">SearchView Demo</string>
     <string name="search">search</string>
 </resources>

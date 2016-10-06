@@ -4,8 +4,8 @@ import android.app.Activity;
 import android.content.Context;
 import android.support.v7.widget.SearchView;
 import android.util.AttributeSet;
-import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ProgressBar;
 
 import com.amsen.par.searchview.prediction.OnPredictionClickListener;
 import com.amsen.par.searchview.prediction.Prediction;
@@ -20,6 +20,7 @@ import java.util.List;
 public class AutoCompleteSearchView extends SearchView {
     private Activity activity;
     private ViewGroup appBar;
+    private ProgressBar loader;
     private PredictionPopupWindow popup;
     private OnPredictionClickListener listener;
     private OnQueryTextListener externalListener;

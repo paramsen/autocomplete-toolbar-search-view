@@ -37,6 +37,7 @@ public class PredictionPopupWindow extends PopupWindow {
         setBackgroundDrawable(ContextCompat.getDrawable(context, R.drawable.prediction_popup_bg));
         setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_ADJUST_RESIZE);
         setInputMethodMode(PopupWindow.INPUT_METHOD_NEEDED);
+        setAnimationStyle(R.style.Animation);
 
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP)
             setElevation(24);
