@@ -30,6 +30,7 @@ public class AutoCompleteSearchView extends SearchView {
     private PredictionPopupWindow popup;
     private OnPredictionClickListener listener;
     private OnQueryTextListener externalListener;
+    private boolean attached;
 
     public AutoCompleteSearchView(Context context) {
         super(context);
@@ -132,7 +133,8 @@ public class AutoCompleteSearchView extends SearchView {
     }
 
     public void showLoader() {
-        loader.setVisibility(VISIBLE);
+        if (attached)
+            loader.setVisibility(VISIBLE);
     }
 
     public void hideLoader() {
@@ -140,7 +142,8 @@ public class AutoCompleteSearchView extends SearchView {
     }
 
     private void showPopup() {
-        popup.showAsDropDown(appBar);
+        if (attached)
+            popup.showAsDropDown(appBar);
     }
 
     private void dismissPopup() {
@@ -154,15 +157,17 @@ public class AutoCompleteSearchView extends SearchView {
     }
 
     @Override
-    protected void onDetachedFromWindow() {
-        dismissPopup();
+    protected void onAttachedToWindow() {
+        super.onAttachedToWindow();
 
-        try {
-            FrameLayout decorView = (FrameLayout) activity.getWindow().getDecorView();
-            decorView.removeView(loader);
-        } catch (Exception e) {
-            //disposed
-        }
+        attached = true;
+    }
+
+    @Override
+    protected void onDetachedFromWindow() {
+        attached = false;
+
+        dismissPopup();
 
         super.onDetachedFromWindow();
     }
