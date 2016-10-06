@@ -113,7 +113,7 @@ public class AutoCompleteSearchView extends SearchView {
 
         int progressBarHeight = (int) pxFromDp(getContext(), 4);
         float statusBarHeight = pxFromDp(getContext(), 25);
-        
+
         FrameLayout.LayoutParams layoutParams = new FrameLayout.LayoutParams(FrameLayout.LayoutParams.MATCH_PARENT, progressBarHeight);
         layoutParams.topMargin = (int) (statusBarHeight + appBar.getHeight() - progressBarHeight - pxFromDp(getContext(), 1)); //the extra 1dp is for margin
         progressBar.setLayoutParams(layoutParams);
