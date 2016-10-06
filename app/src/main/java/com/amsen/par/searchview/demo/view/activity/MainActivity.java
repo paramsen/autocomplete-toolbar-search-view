@@ -34,7 +34,7 @@ public class MainActivity extends AppCompatActivity {
 
         AutoCompleteSearchView searchView = (AutoCompleteSearchView) menu.findItem(R.id.action_search).getActionView();
         searchView.setOnPredictionClickListener((position, prediction) -> {
-            Toast.makeText(this, String.format("clicked [position:%d, id:%d, prediction:%s]", position, prediction.id, prediction.prediction), Toast.LENGTH_SHORT).show();
+            Toast.makeText(this, String.format("clicked [position:%d, value:%s, displayString:%s]", position, prediction.value, prediction.displayString), Toast.LENGTH_SHORT).show();
         });
 
         searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
@@ -60,7 +60,7 @@ public class MainActivity extends AppCompatActivity {
         List<Prediction> forSearchView = new ArrayList<>();
 
         for (String prediction : predictions) {
-            forSearchView.add(new Prediction(prediction.hashCode(), prediction)); //My data doesn't have ID:s, so I use the unique hash sum to identify each item!
+            forSearchView.add(new Prediction(prediction, prediction)); //first param is for complex objects, second for display string.
         }
 
         return forSearchView;

@@ -58,7 +58,7 @@ public class PredictionAdapter extends RecyclerView.Adapter<PredictionAdapter.Pr
         }
 
         public void apply(int position, Prediction prediction, OnPredictionClickListener listener) {
-            predictionView.setText(prediction.prediction);
+            predictionView.setText(prediction.displayString);
             predictionView.setOnClickListener(e -> listener.onClick(position, prediction));
         }
     }
