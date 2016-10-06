@@ -4,7 +4,9 @@ import android.app.Activity;
 import android.content.Context;
 import android.support.v7.widget.SearchView;
 import android.util.AttributeSet;
+import android.util.Xml;
 import android.view.ViewGroup;
+import android.widget.FrameLayout;
 import android.widget.ProgressBar;
 
 import com.amsen.par.searchview.prediction.OnPredictionClickListener;
@@ -12,7 +14,11 @@ import com.amsen.par.searchview.prediction.Prediction;
 import com.amsen.par.searchview.prediction.PredictionPopupWindow;
 import com.amsen.par.searchview.util.ViewUtils;
 
+import org.xmlpull.v1.XmlPullParser;
+
 import java.util.List;
+
+import me.zhanghai.android.materialprogressbar.MaterialProgressBar;
 
 /**
  * @author Pär Amsen 2016
@@ -43,6 +49,7 @@ public class AutoCompleteSearchView extends SearchView {
     private void init(Context context) {
         activity = ViewUtils.getActivity(context);
         appBar = ViewUtils.findActionBar(activity);
+        loader = initLoader();
 
         setOnCloseListener(() -> {
             dismissPopup();
@@ -76,6 +83,32 @@ public class AutoCompleteSearchView extends SearchView {
         });
     }
 
+    private ProgressBar initLoader() {
+        XmlPullParser parser = getResources().getXml(R.xml.test);
+
+        try {
+            parser.next();
+            parser.nextTag();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
+        AttributeSet attr = Xml.asAttributeSet(parser);
+
+        MaterialProgressBar progressBar = new MaterialProgressBar(getContext(), attr, 0, me.zhanghai.android.materialprogressbar.R.style.Widget_MaterialProgressBar_ProgressBar_Horizontal_NoPadding);
+        progressBar.setTag(getClass().getName());
+        progressBar.setVisibility(GONE);
+
+        FrameLayout.LayoutParams layoutParams = new FrameLayout.LayoutParams(FrameLayout.LayoutParams.MATCH_PARENT, (int) ViewUtils.pxFromDp(getContext(), 4));
+        layoutParams.topMargin = (int) (ViewUtils.pxFromDp(getContext(), 25) + appBar.getHeight() - ViewUtils.pxFromDp(getContext(), 4));
+        progressBar.setLayoutParams(layoutParams);
+
+        FrameLayout decorView = (FrameLayout) activity.getWindow().getDecorView();
+        decorView.addView(progressBar, layoutParams);
+
+        return progressBar;
+    }
+
     public void applyPredictions(List<Prediction> predictions) {
         if (popup == null) {
             popup = new PredictionPopupWindow(getContext());
@@ -98,6 +131,14 @@ public class AutoCompleteSearchView extends SearchView {
         externalListener = listener;
     }
 
+    public void showLoader() {
+        loader.setVisibility(VISIBLE);
+    }
+
+    public void hideLoader() {
+        loader.setVisibility(GONE);
+    }
+
     private void showPopup() {
         popup.showAsDropDown(appBar);
     }
@@ -115,6 +156,13 @@ public class AutoCompleteSearchView extends SearchView {
     @Override
     protected void onDetachedFromWindow() {
         dismissPopup();
+
+        try {
+            FrameLayout decorView = (FrameLayout) activity.getWindow().getDecorView();
+            decorView.removeView(loader);
+        } catch (Exception e) {
+            //disposed
+        }
 
         super.onDetachedFromWindow();
     }

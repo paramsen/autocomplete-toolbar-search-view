@@ -14,12 +14,16 @@ import com.amsen.par.searchview.prediction.Prediction;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Timer;
+import java.util.TimerTask;
 
 /**
  * @author Pär Amsen 2016
  */
 public class MainActivity extends AppCompatActivity {
     private MockApi api;
+    private AutoCompleteSearchView searchView;
+    private boolean runningFakeNetworkCall;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -31,10 +35,10 @@ public class MainActivity extends AppCompatActivity {
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
-         getMenuInflater().inflate(R.menu.menu, menu);
+        getMenuInflater().inflate(R.menu.menu, menu);
 
         MenuItem searchViewItem = menu.findItem(R.id.action_search);
-        AutoCompleteSearchView searchView = (AutoCompleteSearchView) searchViewItem.getActionView();
+        searchView = (AutoCompleteSearchView) searchViewItem.getActionView();
 
         searchView.setOnPredictionClickListener((position, prediction) -> {
             Toast.makeText(this, String.format("clicked [position:%d, value:%s, displayString:%s]", position, prediction.value, prediction.displayString), Toast.LENGTH_SHORT).show();
@@ -49,15 +53,33 @@ public class MainActivity extends AppCompatActivity {
 
             @Override
             public boolean onQueryTextChange(String newText) {
-                List<String> rawPredictions = api.getPredictions(newText);
-                List<Prediction> predictions = toSearchViewPredictions(rawPredictions);
-
-                searchView.applyPredictions(predictions);
+                if (newText.length() > 0 && !runningFakeNetworkCall) {
+                    searchView.showLoader();
+                    fakeNetworkDelay(newText);
+                }
 
                 return true;
             }
         });
         return true;
+    }
+
+    private void fakeNetworkDelay(final String query) {
+        new Timer().schedule(new TimerTask() {
+            @Override
+            public void run() {
+                runningFakeNetworkCall = true;
+
+                runOnUiThread(() -> {
+                    List<String> rawPredictions = api.getPredictions(query);
+                    List<Prediction> predictions = toSearchViewPredictions(rawPredictions);
+                    searchView.applyPredictions(predictions);
+                    searchView.hideLoader();
+
+                    runningFakeNetworkCall = false;
+                });
+            }
+        }, 400 + (long) (Math.random() * 1100));
     }
 
     private List<com.amsen.par.searchview.prediction.Prediction> toSearchViewPredictions(List<String> predictions) {
