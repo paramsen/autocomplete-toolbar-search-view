@@ -20,6 +20,8 @@ import java.util.List;
 
 import me.zhanghai.android.materialprogressbar.MaterialProgressBar;
 
+import static com.amsen.par.searchview.util.ViewUtils.pxFromDp;
+
 /**
  * @author Pär Amsen 2016
  */
@@ -30,7 +32,9 @@ public class AutoCompleteSearchView extends SearchView {
     private PredictionPopupWindow popup;
     private OnPredictionClickListener listener;
     private OnQueryTextListener externalListener;
+
     private boolean attached;
+    private String latestQuery;
 
     public AutoCompleteSearchView(Context context) {
         super(context);
@@ -76,12 +80,19 @@ public class AutoCompleteSearchView extends SearchView {
                 }
 
                 if (newText.length() == 0) {
-                    dismissPopup();
+                    onEmptyQuery();
                 }
+
+                latestQuery = newText;
 
                 return true;
             }
         });
+    }
+
+    private void onEmptyQuery() {
+        dismissPopup();
+        hideLoader();
     }
 
     private ProgressBar initLoader() {
@@ -100,8 +111,11 @@ public class AutoCompleteSearchView extends SearchView {
         progressBar.setTag(getClass().getName());
         progressBar.setVisibility(GONE);
 
-        FrameLayout.LayoutParams layoutParams = new FrameLayout.LayoutParams(FrameLayout.LayoutParams.MATCH_PARENT, (int) ViewUtils.pxFromDp(getContext(), 4));
-        layoutParams.topMargin = (int) (ViewUtils.pxFromDp(getContext(), 25) + appBar.getHeight() - ViewUtils.pxFromDp(getContext(), 4));
+        int progressBarHeight = (int) pxFromDp(getContext(), 4);
+        float statusBarHeight = pxFromDp(getContext(), 25);
+
+        FrameLayout.LayoutParams layoutParams = new FrameLayout.LayoutParams(FrameLayout.LayoutParams.MATCH_PARENT, progressBarHeight);
+        layoutParams.topMargin = (int) (statusBarHeight + appBar.getHeight() - progressBarHeight - pxFromDp(getContext(), 1));
         progressBar.setLayoutParams(layoutParams);
 
         FrameLayout decorView = (FrameLayout) activity.getWindow().getDecorView();
@@ -111,16 +125,18 @@ public class AutoCompleteSearchView extends SearchView {
     }
 
     public void applyPredictions(List<Prediction> predictions) {
-        if (popup == null) {
-            popup = new PredictionPopupWindow(getContext());
+        if (latestQuery.length() > 0) {
+            if (popup == null) {
+                popup = new PredictionPopupWindow(getContext());
 
-            if (listener != null) {
-                popup.setOnPredictionClickListener(listener);
+                if (listener != null) {
+                    popup.setOnPredictionClickListener(listener);
+                }
             }
-        }
 
-        popup.applyPredictions(predictions);
-        showPopup();
+            popup.applyPredictions(predictions);
+            showPopup();
+        }
     }
 
     public void dismissPredictionView() {
