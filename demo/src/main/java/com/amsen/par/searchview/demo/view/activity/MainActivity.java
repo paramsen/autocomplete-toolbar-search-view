@@ -23,7 +23,8 @@ import java.util.TimerTask;
 public class MainActivity extends AppCompatActivity {
     private MockApi api;
     private AutoCompleteSearchView searchView;
-    private boolean runningFakeNetworkCall;
+    private TimerTask fakeNetworkCall;
+    private Timer fakeNetworkThread;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -31,6 +32,7 @@ public class MainActivity extends AppCompatActivity {
         setContentView(R.layout.activity_main);
 
         api = new MockApi();
+        fakeNetworkThread = new Timer();
     }
 
     @Override
@@ -53,9 +55,10 @@ public class MainActivity extends AppCompatActivity {
 
             @Override
             public boolean onQueryTextChange(String newText) {
-                if (newText.length() > 0 && !runningFakeNetworkCall) {
+                if (newText.length() > 0) {
                     searchView.showLoader();
-                    fakeNetworkDelay(newText);
+
+                    fakeNetworkPredictions(newText);
                 }
 
                 return true;
@@ -64,22 +67,33 @@ public class MainActivity extends AppCompatActivity {
         return true;
     }
 
-    private void fakeNetworkDelay(final String query) {
-        new Timer().schedule(new TimerTask() {
+    /**
+     * Async predictions with a delay of 400-1500ms
+     * If called again before the old "request" finished
+     * the old will be canceled and the new starts
+     * instead.
+     */
+    private void fakeNetworkPredictions(final String query) {
+        if (fakeNetworkCall != null) {
+            fakeNetworkCall.cancel();
+            fakeNetworkCall = null;
+        }
+
+        fakeNetworkCall = new TimerTask() {
             @Override
             public void run() {
-                runningFakeNetworkCall = true;
-
                 runOnUiThread(() -> {
+                    fakeNetworkCall = null;
+
                     List<String> rawPredictions = api.getPredictions(query);
                     List<Prediction> predictions = toSearchViewPredictions(rawPredictions);
                     searchView.applyPredictions(predictions);
                     searchView.hideLoader();
-
-                    runningFakeNetworkCall = false;
                 });
             }
-        }, 400 + (long) (Math.random() * 1100));
+        };
+
+        fakeNetworkThread.schedule(fakeNetworkCall, 400 + (long) (Math.random() * 1100));
     }
 
     private List<com.amsen.par.searchview.prediction.Prediction> toSearchViewPredictions(List<String> predictions) {

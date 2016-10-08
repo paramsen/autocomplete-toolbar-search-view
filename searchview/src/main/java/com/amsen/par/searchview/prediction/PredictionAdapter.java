@@ -1,5 +1,6 @@
 package com.amsen.par.searchview.prediction;
 
+import android.os.Build;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -10,6 +11,9 @@ import com.amsen.par.searchview.R;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.concurrent.TimeUnit;
+
+import static com.amsen.par.searchview.util.ViewUtils.delay;
 
 /**
  * @author Pär Amsen 2016
@@ -59,7 +63,12 @@ public class PredictionAdapter extends RecyclerView.Adapter<PredictionAdapter.Pr
 
         public void apply(int position, Prediction prediction, OnPredictionClickListener listener) {
             predictionView.setText(prediction.displayString);
-            predictionView.setOnClickListener(e -> listener.onClick(position, prediction));
+
+            if (Build.VERSION.SDK_INT > Build.VERSION_CODES.LOLLIPOP) {
+                predictionView.setOnClickListener(e -> delay(() -> listener.onClick(position, prediction), 300, TimeUnit.MILLISECONDS)); //UI delay for ripple effect
+            } else {
+                predictionView.setOnClickListener(listener.onClick(position, prediction);
+            }
         }
     }
 }

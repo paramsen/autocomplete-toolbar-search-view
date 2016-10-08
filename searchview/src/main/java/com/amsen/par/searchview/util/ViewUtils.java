@@ -3,8 +3,11 @@ package com.amsen.par.searchview.util;
 import android.app.Activity;
 import android.content.Context;
 import android.content.ContextWrapper;
+import android.os.Handler;
 import android.view.View;
 import android.view.ViewGroup;
+
+import java.util.concurrent.TimeUnit;
 
 /**
  * @author Pär Amsen 2016
@@ -45,7 +48,7 @@ public class ViewUtils {
         return actionBar;
     }
 
-    public static ViewGroup findToolbar(ViewGroup viewGroup) {
+    private static ViewGroup findToolbar(ViewGroup viewGroup) {
         ViewGroup toolbar = null;
         for (int i = 0, len = viewGroup.getChildCount(); i < len; i++) {
             View view = viewGroup.getChildAt(i);
@@ -68,5 +71,12 @@ public class ViewUtils {
 
     public static float pxFromDp(final Context context, final float dp) {
         return dp * context.getResources().getDisplayMetrics().density;
+    }
+
+    /**
+     * Run on current thread after the delay.
+     */
+    public static void delay(final Runnable run, int delay, TimeUnit delayUnit) {
+        new Handler().postDelayed(run, delayUnit.toMillis(delay));
     }
 }
