@@ -5,6 +5,8 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.SearchView;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.View;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.amsen.par.searchview.AutoCompleteSearchView;
@@ -26,6 +28,10 @@ public class MainActivity extends AppCompatActivity {
     private TimerTask fakeNetworkCall;
     private Timer fakeNetworkThread;
 
+    private View callToActionView;
+    private View searchedTitle;
+    private TextView predictionResultView;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -33,6 +39,10 @@ public class MainActivity extends AppCompatActivity {
 
         api = new MockApi();
         fakeNetworkThread = new Timer();
+
+        callToActionView = findViewById(R.id.clickSearch);
+        searchedTitle = findViewById(R.id.title);
+        predictionResultView = (TextView) findViewById(R.id.selectedPrediction);
     }
 
     @Override
@@ -43,7 +53,12 @@ public class MainActivity extends AppCompatActivity {
         searchView = (AutoCompleteSearchView) searchViewItem.getActionView();
 
         searchView.setOnPredictionClickListener((position, prediction) -> {
+            callToActionView.setVisibility(View.GONE);
+            searchedTitle.setVisibility(View.VISIBLE);
+            predictionResultView.setVisibility(View.VISIBLE);
+
             Toast.makeText(this, String.format("clicked [position:%d, value:%s, displayString:%s]", position, prediction.value, prediction.displayString), Toast.LENGTH_SHORT).show();
+            predictionResultView.setText("You tapped: " + prediction.displayString);
             searchViewItem.collapseActionView();
         });
 
