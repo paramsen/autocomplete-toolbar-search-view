@@ -63,4 +63,17 @@
         android:textSize="14sp"
         android:visibility="gone"
         tools:text="Google Places data" />
+
+    <View
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:layout_weight="1" />
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center_horizontal"
+        android:textAppearance="@style/TextAppearance.AppCompat.Medium"
+        android:textSize="14sp"
+        android:text="A view at the bottom" />
 </LinearLayout>
