@@ -33,7 +33,6 @@ public class PredictionPopupWindow extends PopupWindow {
         recycler.setLayoutManager(new LinearLayoutManager(context, LinearLayoutManager.VERTICAL, false));
         recycler.setAdapter(adapter);
 
-        setOutsideTouchable(true);
         setBackgroundDrawable(ContextCompat.getDrawable(context, R.drawable.prediction_popup_bg));
         setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_ADJUST_RESIZE);
         setInputMethodMode(PopupWindow.INPUT_METHOD_NEEDED);

@@ -6,6 +6,8 @@ import android.support.v7.widget.SearchView;
 import android.util.AttributeSet;
 import android.util.Xml;
 import android.view.ViewGroup;
+import android.view.inputmethod.EditorInfo;
+import android.view.inputmethod.InputMethodManager;
 import android.widget.FrameLayout;
 import android.widget.ProgressBar;
 
@@ -56,6 +58,8 @@ public class AutoCompleteSearchView extends SearchView {
         appBar = ViewUtils.findActionBar(activity);
         loader = initLoader();
 
+        setImeOptions(EditorInfo.IME_ACTION_DONE);
+
         setOnCloseListener(() -> {
             dismissPopup();
             popup = null;
@@ -66,6 +70,9 @@ public class AutoCompleteSearchView extends SearchView {
         super.setOnQueryTextListener(new OnQueryTextListener() {
             @Override
             public boolean onQueryTextSubmit(String query) {
+                InputMethodManager inputManager = (InputMethodManager) context.getSystemService(Context.INPUT_METHOD_SERVICE);
+                inputManager.toggleSoftInput(0, 0);
+
                 if (externalListener != null) {
                     return externalListener.onQueryTextSubmit(query);
                 }
