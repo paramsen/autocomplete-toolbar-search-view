@@ -64,10 +64,10 @@ public class PredictionAdapter extends RecyclerView.Adapter<PredictionAdapter.Pr
         public void apply(int position, Prediction prediction, OnPredictionClickListener listener) {
             predictionView.setText(prediction.displayString);
 
-            if (Build.VERSION.SDK_INT > Build.VERSION_CODES.LOLLIPOP) {
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
                 predictionView.setOnClickListener(e -> delay(() -> listener.onClick(position, prediction), 300, TimeUnit.MILLISECONDS)); //UI delay for ripple effect
             } else {
-                predictionView.setOnClickListener(listener.onClick(position, prediction);
+                predictionView.setOnClickListener(e -> listener.onClick(position, prediction));
             }
         }
     }
