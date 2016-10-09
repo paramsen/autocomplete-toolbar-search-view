@@ -18,6 +18,7 @@
 
 -keep class com.amsen.par.searchview.** { *; }
 -keepattributes EnclosingMethod
+-keepattributes InnerClasses
 
 #retrolambda
 -dontwarn java.lang.invoke.*
