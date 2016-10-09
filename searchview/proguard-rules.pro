@@ -15,3 +15,9 @@
 #-keepclassmembers class fqcn.of.javascript.interface.for.webview {
 #   public *;
 #}
+
+-keep class com.amsen.par.searchview.** { *; }
+-keepattributes EnclosingMethod
+
+#retrolambda
+-dontwarn java.lang.invoke.*

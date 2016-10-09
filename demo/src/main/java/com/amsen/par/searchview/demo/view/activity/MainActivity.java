@@ -13,6 +13,7 @@ import com.amsen.par.searchview.AutoCompleteSearchView;
 import com.amsen.par.searchview.demo.R;
 import com.amsen.par.searchview.demo.api.MockApi;
 import com.amsen.par.searchview.prediction.Prediction;
+import com.google.firebase.analytics.FirebaseAnalytics;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -23,6 +24,7 @@ import java.util.TimerTask;
  * @author Pär Amsen 2016
  */
 public class MainActivity extends AppCompatActivity {
+    private FirebaseAnalytics firebaseAnalytics;
     private MockApi api;
     private AutoCompleteSearchView searchView;
     private TimerTask fakeNetworkCall;
@@ -37,6 +39,7 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
+        firebaseAnalytics = FirebaseAnalytics.getInstance(this);
         api = new MockApi();
         fakeNetworkThread = new Timer();
 
