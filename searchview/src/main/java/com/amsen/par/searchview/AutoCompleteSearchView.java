@@ -13,7 +13,9 @@ import android.widget.ProgressBar;
 
 import com.amsen.par.searchview.prediction.OnPredictionClickListener;
 import com.amsen.par.searchview.prediction.Prediction;
-import com.amsen.par.searchview.prediction.PredictionPopupWindow;
+import com.amsen.par.searchview.prediction.adapter.DefaultPredictionHolder;
+import com.amsen.par.searchview.prediction.view.BasePredictionPopupWindow;
+import com.amsen.par.searchview.prediction.view.DefaultPredictionPopupWindow;
 import com.amsen.par.searchview.util.ViewUtils;
 
 import org.xmlpull.v1.XmlPullParser;
@@ -30,39 +32,42 @@ import static com.amsen.par.searchview.util.ViewUtils.pxFromDp;
 public class AutoCompleteSearchView extends SearchView {
     private Activity activity;
     private ViewGroup appBar;
-    private ProgressBar loader;
-    private PredictionPopupWindow popup;
+    private ProgressBar progressBar;
+    private BasePredictionPopupWindow popup;
     private OnPredictionClickListener listener;
     private OnQueryTextListener externalListener;
 
     private boolean attached;
     private String latestQuery;
+    private boolean useDefaultProgressBar = false;
+    private boolean useDefaultPredictionPopupWindow = true;
 
     public AutoCompleteSearchView(Context context) {
         super(context);
-        init(context);
+        init(context, null);
     }
 
     public AutoCompleteSearchView(Context context, AttributeSet attrs) {
         super(context, attrs);
-        init(context);
+        init(context, attrs);
     }
 
     public AutoCompleteSearchView(Context context, AttributeSet attrs, int defStyleAttr) {
         super(context, attrs, defStyleAttr);
-        init(context);
+        init(context, attrs);
     }
 
-    private void init(Context context) {
+    private void init(Context context, AttributeSet attrs) {
         activity = ViewUtils.getActivity(context);
         appBar = ViewUtils.findActionBar(activity);
-        loader = initLoader();
 
         setImeOptions(EditorInfo.IME_ACTION_DONE);
 
         setOnCloseListener(() -> {
             dismissPopup();
-            popup = null;
+
+            if (!useDefaultPredictionPopupWindow)
+                popup = null;
 
             return false;
         });
@@ -99,11 +104,18 @@ public class AutoCompleteSearchView extends SearchView {
 
     private void onEmptyQuery() {
         dismissPopup();
-        hideLoader();
+        hideProgressBar();
     }
 
-    private ProgressBar initLoader() {
-        XmlPullParser parser = getResources().getXml(R.xml.test);
+    public void setPredictionPopupWindow(BasePredictionPopupWindow popup) {
+        if (useDefaultPredictionPopupWindow)
+            throw new RuntimeException("You are using the builtin popup, declare in XML with app:useDefaultPredictionPopupWindow=false or with AutoCompleteSearchView.useDefaultPredictionPopupWindow(false)");
+
+        this.popup = popup;
+    }
+
+    private ProgressBar initProgressBar() {
+        XmlPullParser parser = getResources().getXml(R.xml.progressbar_raw_layout);
 
         try {
             parser.next();
@@ -131,10 +143,25 @@ public class AutoCompleteSearchView extends SearchView {
         return progressBar;
     }
 
+    public void setUseDefaultProgressBar(boolean useDefaultProgressBar) {
+        this.useDefaultProgressBar = useDefaultProgressBar;
+
+        if (useDefaultProgressBar) {
+            progressBar = initProgressBar();
+        }
+    }
+
+    public void setUseDefaultPredictionPopupWindow(boolean useDefaultPredictionPopupWindow) {
+        this.useDefaultPredictionPopupWindow = useDefaultPredictionPopupWindow;
+    }
+
     public void applyPredictions(List<Prediction> predictions) {
         if (latestQuery.length() > 0) {
             if (popup == null) {
-                popup = new PredictionPopupWindow(getContext());
+                if (!useDefaultPredictionPopupWindow)
+                    throw new RuntimeException("You have declared to not use the default popup, you need to call setPredictionPopupWindow with your instance");
+
+                popup = new DefaultPredictionPopupWindow<DefaultPredictionHolder>(getContext());
 
                 if (listener != null) {
                     popup.setOnPredictionClickListener(listener);
@@ -155,21 +182,22 @@ public class AutoCompleteSearchView extends SearchView {
         externalListener = listener;
     }
 
-    public void showLoader() {
-        if (attached)
-            loader.setVisibility(VISIBLE);
+    public void showProgressBar() {
+        if (attached && progressBar != null)
+            progressBar.setVisibility(VISIBLE);
     }
 
-    public void hideLoader() {
-        loader.setVisibility(GONE);
+    public void hideProgressBar() {
+        if (progressBar != null)
+            progressBar.setVisibility(GONE);
     }
 
-    private void showPopup() {
+    public void showPopup() {
         if (attached)
             popup.showAsDropDown(appBar);
     }
 
-    private void dismissPopup() {
+    public void dismissPopup() {
         if (popup != null) {
             popup.dismiss();
         }

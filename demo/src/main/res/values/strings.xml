@@ -1,4 +1,5 @@
 <resources>
     <string name="app_name">SearchView Demo</string>
     <string name="search">search</string>
+    <string name="and_search_ARG1">and search %1$s</string>
 </resources>

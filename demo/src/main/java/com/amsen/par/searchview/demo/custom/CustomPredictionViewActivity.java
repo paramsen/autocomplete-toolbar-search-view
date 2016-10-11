@@ -1,4 +1,4 @@
-package com.amsen.par.searchview.demo.view.activity;
+package com.amsen.par.searchview.demo.custom;
 
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
@@ -12,7 +12,10 @@ import android.widget.Toast;
 import com.amsen.par.searchview.AutoCompleteSearchView;
 import com.amsen.par.searchview.demo.R;
 import com.amsen.par.searchview.demo.api.MockApi;
+import com.amsen.par.searchview.prediction.OnPredictionClickListener;
 import com.amsen.par.searchview.prediction.Prediction;
+import com.amsen.par.searchview.prediction.view.BasePredictionPopupWindow;
+import com.amsen.par.searchview.prediction.view.DefaultPredictionPopupWindow;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -22,7 +25,7 @@ import java.util.TimerTask;
 /**
  * @author Pär Amsen 2016
  */
-public class MainActivity extends AppCompatActivity {
+public class CustomPredictionViewActivity extends AppCompatActivity {
     private MockApi api;
     private AutoCompleteSearchView searchView;
     private TimerTask fakeNetworkCall;
@@ -56,6 +59,8 @@ public class MainActivity extends AppCompatActivity {
         MenuItem searchViewItem = menu.findItem(R.id.action_search);
         searchView = (AutoCompleteSearchView) searchViewItem.getActionView();
         searchView.setUseDefaultProgressBar(true);
+        searchView.setUseDefaultPredictionPopupWindow(false);
+        searchView.setPredictionPopupWindow(new DefaultPredictionPopupWindow<CustomPredictionViewHolder>(this, new CustomPredictionAdapter()));
 
         searchView.setOnPredictionClickListener((position, prediction) -> {
             callToActionView.setVisibility(View.GONE);
@@ -116,7 +121,7 @@ public class MainActivity extends AppCompatActivity {
         fakeNetworkThread.schedule(fakeNetworkCall, 400 + (long) (Math.random() * 1100));
     }
 
-    private List<com.amsen.par.searchview.prediction.Prediction> toSearchViewPredictions(List<String> predictions) {
+    private List<Prediction> toSearchViewPredictions(List<String> predictions) {
         List<Prediction> forSearchView = new ArrayList<>();
 
         for (String prediction : predictions) {
