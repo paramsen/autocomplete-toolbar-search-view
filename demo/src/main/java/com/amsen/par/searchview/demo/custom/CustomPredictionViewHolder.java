@@ -15,7 +15,7 @@ public class CustomPredictionViewHolder extends PredictionHolder {
 
     public CustomPredictionViewHolder(View itemView) {
         super(itemView);
-        title = (TextView) itemView.findViewById(com.amsen.par.searchview.R.id.prediction1);
+        title = (TextView) itemView.findViewById(com.amsen.par.searchview.R.id.title);
     }
 
     @Override

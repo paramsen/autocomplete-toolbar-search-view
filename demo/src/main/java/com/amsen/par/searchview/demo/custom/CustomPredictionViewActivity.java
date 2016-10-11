@@ -12,9 +12,7 @@ import android.widget.Toast;
 import com.amsen.par.searchview.AutoCompleteSearchView;
 import com.amsen.par.searchview.demo.R;
 import com.amsen.par.searchview.demo.api.MockApi;
-import com.amsen.par.searchview.prediction.OnPredictionClickListener;
 import com.amsen.par.searchview.prediction.Prediction;
-import com.amsen.par.searchview.prediction.view.BasePredictionPopupWindow;
 import com.amsen.par.searchview.prediction.view.DefaultPredictionPopupWindow;
 
 import java.util.ArrayList;

@@ -1,7 +1,6 @@
 package com.amsen.par.searchview.prediction.adapter;
 
 import android.os.Build;
-import android.support.v7.widget.RecyclerView;
 import android.view.View;
 import android.widget.TextView;
 
@@ -21,7 +20,7 @@ public class DefaultPredictionHolder extends PredictionHolder{
 
     public DefaultPredictionHolder(View itemView) {
         super(itemView);
-        predictionView = (TextView) itemView.findViewById(R.id.prediction1);
+        predictionView = (TextView) itemView.findViewById(R.id.title);
     }
 
     public void apply(int position, Prediction prediction, OnPredictionClickListener listener) {

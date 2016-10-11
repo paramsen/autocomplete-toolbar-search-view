@@ -1,4 +1,4 @@
-package com.amsen.par.searchview.demo.view.activity;
+package com.amsen.par.searchview.demo.simple;
 
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
