@@ -2,13 +2,19 @@ package com.amsen.par.searchview;
 
 import android.app.Activity;
 import android.content.Context;
+import android.content.res.Resources;
+import android.os.Build;
+import android.support.annotation.StyleRes;
+import android.support.v7.view.ContextThemeWrapper;
 import android.support.v7.widget.SearchView;
 import android.util.AttributeSet;
 import android.util.Xml;
+import android.view.Gravity;
 import android.view.ViewGroup;
 import android.view.inputmethod.EditorInfo;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.FrameLayout;
+import android.widget.PopupWindow;
 import android.widget.ProgressBar;
 
 import com.amsen.par.searchview.prediction.OnPredictionClickListener;
@@ -24,6 +30,7 @@ import java.util.List;
 
 import me.zhanghai.android.materialprogressbar.MaterialProgressBar;
 
+import static com.amsen.par.searchview.util.ViewUtils.dpFromPx;
 import static com.amsen.par.searchview.util.ViewUtils.pxFromDp;
 
 /**
@@ -34,13 +41,15 @@ public class AutoCompleteSearchView extends SearchView {
     private ViewGroup appBar;
     private ProgressBar progressBar;
     private BasePredictionPopupWindow popup;
-    private OnPredictionClickListener listener;
-    private OnQueryTextListener externalListener;
+    private OnPredictionClickListener onPredictionClickListener;
+    private OnQueryTextListener externalOnQueryTextListener;
+    private OnCloseListener externalOnCloseListener;
 
     private boolean attached;
     private String latestQuery;
     private boolean useDefaultProgressBar = false;
     private boolean useDefaultPredictionPopupWindow = true;
+    private float statusBarHeight = pxFromDp(getContext(), 25);
 
     public AutoCompleteSearchView(Context context) {
         super(context);
@@ -57,13 +66,16 @@ public class AutoCompleteSearchView extends SearchView {
         init(context, attrs);
     }
 
-    private void init(Context context, AttributeSet attrs) {
+    private void init(final Context context, AttributeSet attrs) {
         activity = ViewUtils.getActivity(context);
         appBar = ViewUtils.findActionBar(activity);
 
         setImeOptions(EditorInfo.IME_ACTION_DONE);
 
-        setOnCloseListener(() -> {
+        super.setOnCloseListener(() -> {
+            if (externalOnCloseListener != null)
+                externalOnCloseListener.onClose();
+
             dismissPopup();
 
             if (!useDefaultPredictionPopupWindow)
@@ -78,8 +90,8 @@ public class AutoCompleteSearchView extends SearchView {
                 InputMethodManager inputManager = (InputMethodManager) context.getSystemService(Context.INPUT_METHOD_SERVICE);
                 inputManager.toggleSoftInput(0, 0);
 
-                if (externalListener != null) {
-                    return externalListener.onQueryTextSubmit(query);
+                if (externalOnQueryTextListener != null) {
+                    return externalOnQueryTextListener.onQueryTextSubmit(query);
                 }
 
                 return true;
@@ -87,8 +99,8 @@ public class AutoCompleteSearchView extends SearchView {
 
             @Override
             public boolean onQueryTextChange(String newText) {
-                if (externalListener != null) {
-                    externalListener.onQueryTextChange(newText);
+                if (externalOnQueryTextListener != null) {
+                    externalOnQueryTextListener.onQueryTextChange(newText);
                 }
 
                 if (newText.length() == 0) {
@@ -100,6 +112,11 @@ public class AutoCompleteSearchView extends SearchView {
                 return true;
             }
         });
+    }
+
+    @Override
+    public void setOnCloseListener(OnCloseListener listener) {
+        this.externalOnCloseListener = listener;
     }
 
     private void onEmptyQuery() {
@@ -114,7 +131,7 @@ public class AutoCompleteSearchView extends SearchView {
         this.popup = popup;
     }
 
-    private ProgressBar initProgressBar() {
+    private ProgressBar initProgressBar(Context context) {
         XmlPullParser parser = getResources().getXml(R.xml.progressbar_raw_layout);
 
         try {
@@ -126,15 +143,19 @@ public class AutoCompleteSearchView extends SearchView {
 
         AttributeSet attr = Xml.asAttributeSet(parser);
 
-        MaterialProgressBar progressBar = new MaterialProgressBar(getContext(), attr, 0, me.zhanghai.android.materialprogressbar.R.style.Widget_MaterialProgressBar_ProgressBar_Horizontal_NoPadding);
+        MaterialProgressBar progressBar = new MaterialProgressBar(context, attr, 0, me.zhanghai.android.materialprogressbar.R.style.Widget_MaterialProgressBar_ProgressBar_Horizontal_NoPadding);
         progressBar.setTag(getClass().getName());
         progressBar.setVisibility(GONE);
 
         int progressBarHeight = (int) pxFromDp(getContext(), 4);
-        float statusBarHeight = pxFromDp(getContext(), 25);
 
         FrameLayout.LayoutParams layoutParams = new FrameLayout.LayoutParams(FrameLayout.LayoutParams.MATCH_PARENT, progressBarHeight);
-        layoutParams.topMargin = (int) (statusBarHeight + appBar.getHeight() - progressBarHeight - pxFromDp(getContext(), 1)); //the extra 1dp is for margin
+        int extraMargin = 0;
+
+        if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.M)
+            extraMargin = (int) pxFromDp(getContext(), 1); //margin on newer devices
+
+        layoutParams.topMargin = (int) (statusBarHeight + appBar.getHeight() - progressBarHeight - extraMargin);
         progressBar.setLayoutParams(layoutParams);
 
         FrameLayout decorView = (FrameLayout) activity.getWindow().getDecorView();
@@ -147,8 +168,14 @@ public class AutoCompleteSearchView extends SearchView {
         this.useDefaultProgressBar = useDefaultProgressBar;
 
         if (useDefaultProgressBar) {
-            progressBar = initProgressBar();
+            progressBar = initProgressBar(getContext());
         }
+    }
+
+    public void setProgressBarTheme(@StyleRes int theme) {
+        FrameLayout decorView = (FrameLayout) activity.getWindow().getDecorView();
+        decorView.removeView(progressBar);
+        progressBar = initProgressBar(new ContextThemeWrapper(getContext(), theme));
     }
 
     public void setUseDefaultPredictionPopupWindow(boolean useDefaultPredictionPopupWindow) {
@@ -163,8 +190,8 @@ public class AutoCompleteSearchView extends SearchView {
 
                 popup = new DefaultPredictionPopupWindow<DefaultPredictionHolder>(getContext());
 
-                if (listener != null) {
-                    popup.setOnPredictionClickListener(listener);
+                if (onPredictionClickListener != null) {
+                    popup.setOnPredictionClickListener(onPredictionClickListener);
                 }
             }
 
@@ -179,7 +206,7 @@ public class AutoCompleteSearchView extends SearchView {
 
     @Override
     public void setOnQueryTextListener(OnQueryTextListener listener) {
-        externalListener = listener;
+        externalOnQueryTextListener = listener;
     }
 
     public void showProgressBar() {
@@ -193,8 +220,20 @@ public class AutoCompleteSearchView extends SearchView {
     }
 
     public void showPopup() {
-        if (attached)
-            popup.showAsDropDown(appBar);
+        if (appBar == null)
+            throw new RuntimeException("Could not automatically find the appBar (Toolbar/ActionBar/Etc), supply it yourself via AutoCompleteSearchView.setAppBar or expect major errors, this is probably due to subclassing the Toolbar/ActionBar or using a 3rd party one");
+
+        if (attached) {
+            if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
+                popup.showAtLocation(appBar, Gravity.NO_GRAVITY, 0, (int) (appBar.getHeight() + statusBarHeight));
+            } else {
+                popup.showAsDropDown(appBar);
+            }
+        }
+    }
+
+    public void setAppBar(ViewGroup appBar) {
+        this.appBar = appBar;
     }
 
     public void dismissPopup() {
@@ -204,7 +243,10 @@ public class AutoCompleteSearchView extends SearchView {
     }
 
     public void setOnPredictionClickListener(OnPredictionClickListener listener) {
-        this.listener = listener;
+        this.onPredictionClickListener = listener;
+
+        if (popup != null)
+            popup.setOnPredictionClickListener(listener);
     }
 
     @Override

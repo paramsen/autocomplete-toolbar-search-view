@@ -40,4 +40,12 @@ public abstract class BasePredictionAdapter<T extends PredictionHolder> extends 
         this.listener = listener;
         notifyDataSetChanged();
     }
+
+    public List<Prediction> getPredictions() {
+        return predictions;
+    }
+
+    public void setPredictions(List<Prediction> predictions) {
+        this.predictions = predictions;
+    }
 }

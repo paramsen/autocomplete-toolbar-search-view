@@ -9,7 +9,7 @@ import java.util.List;
 public class MockApi {
     public List<String> getPredictions(String query) {
         if (query.length() > 0) {
-            int amountOfResults = 5;
+            int amountOfResults = 8;
 
             return generatePredictions(amountOfResults, query);
         }

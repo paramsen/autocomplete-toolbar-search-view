@@ -47,7 +47,7 @@ public class CustomPredictionViewActivity extends AppCompatActivity {
         searchedTitle = findViewById(R.id.title);
         predictionResultView = (TextView) findViewById(R.id.selectedPrediction);
 
-        andSearch.setText(getString(R.string.and_search_ARG1, "\uD83E\uDD13")); //set nerd
+        andSearch.setText(getString(R.string.and_search_ARG1, "\uD83E\uDD13")); //nerd emoji code
     }
 
     @Override

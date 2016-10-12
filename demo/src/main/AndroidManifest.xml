@@ -11,7 +11,7 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
         <activity
-            android:name=".custom.CustomPredictionViewActivity"
+            android:name=".simple.MainActivity"
             android:windowSoftInputMode="adjustResize">
             <intent-filter>
 
@@ -19,7 +19,7 @@
             </intent-filter>
         </activity>
         <activity
-            android:name=".simple.MainActivity"
+            android:name=".custom.CustomPredictionViewActivity"
             android:windowSoftInputMode="adjustResize">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />

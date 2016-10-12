@@ -20,7 +20,7 @@ import static android.view.ViewGroup.LayoutParams.WRAP_CONTENT;
  */
 public abstract class BasePredictionPopupWindow<T extends PredictionHolder> extends PopupWindow implements PredictionPopupWindow {
     public BasePredictionPopupWindow(Context context, @LayoutRes int layout) {
-        super(LayoutInflater.from(context).inflate(layout, null), MATCH_PARENT, WRAP_CONTENT, false);
+        super(LayoutInflater.from(context).inflate(layout, null), MATCH_PARENT, MATCH_PARENT, false);
 
         setBackgroundDrawable(ContextCompat.getDrawable(getContentView().getContext(), R.drawable.prediction_popup_bg));
         setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_ADJUST_RESIZE);
