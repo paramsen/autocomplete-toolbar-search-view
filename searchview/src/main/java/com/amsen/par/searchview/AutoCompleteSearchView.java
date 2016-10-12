@@ -2,7 +2,6 @@ package com.amsen.par.searchview;
 
 import android.app.Activity;
 import android.content.Context;
-import android.content.res.Resources;
 import android.os.Build;
 import android.support.annotation.StyleRes;
 import android.support.v7.view.ContextThemeWrapper;
@@ -14,7 +13,6 @@ import android.view.ViewGroup;
 import android.view.inputmethod.EditorInfo;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.FrameLayout;
-import android.widget.PopupWindow;
 import android.widget.ProgressBar;
 
 import com.amsen.par.searchview.prediction.OnPredictionClickListener;
@@ -30,7 +28,6 @@ import java.util.List;
 
 import me.zhanghai.android.materialprogressbar.MaterialProgressBar;
 
-import static com.amsen.par.searchview.util.ViewUtils.dpFromPx;
 import static com.amsen.par.searchview.util.ViewUtils.pxFromDp;
 
 /**
@@ -152,7 +149,7 @@ public class AutoCompleteSearchView extends SearchView {
         FrameLayout.LayoutParams layoutParams = new FrameLayout.LayoutParams(FrameLayout.LayoutParams.MATCH_PARENT, progressBarHeight);
         int extraMargin = 0;
 
-        if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.M)
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M)
             extraMargin = (int) pxFromDp(getContext(), 1); //margin on newer devices
 
         layoutParams.topMargin = (int) (statusBarHeight + appBar.getHeight() - progressBarHeight - extraMargin);
@@ -224,7 +221,7 @@ public class AutoCompleteSearchView extends SearchView {
             throw new RuntimeException("Could not automatically find the appBar (Toolbar/ActionBar/Etc), supply it yourself via AutoCompleteSearchView.setAppBar or expect major errors, this is probably due to subclassing the Toolbar/ActionBar or using a 3rd party one");
 
         if (attached) {
-            if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
                 popup.showAtLocation(appBar, Gravity.NO_GRAVITY, 0, (int) (appBar.getHeight() + statusBarHeight));
             } else {
                 popup.showAsDropDown(appBar);
@@ -247,6 +244,14 @@ public class AutoCompleteSearchView extends SearchView {
 
         if (popup != null)
             popup.setOnPredictionClickListener(listener);
+    }
+
+    public BasePredictionPopupWindow getPopup() {
+        return popup;
+    }
+
+    public boolean isAttached() {
+        return attached;
     }
 
     @Override

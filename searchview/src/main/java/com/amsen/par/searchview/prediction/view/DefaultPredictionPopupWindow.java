@@ -49,4 +49,20 @@ public class DefaultPredictionPopupWindow<T extends PredictionHolder> extends Ba
     public void setOnPredictionClickListener(OnPredictionClickListener listener) {
         adapter.setOnItemClickListener(listener);
     }
+
+    public RecyclerView getRecycler() {
+        return recycler;
+    }
+
+    public void setRecycler(RecyclerView recycler) {
+        this.recycler = recycler;
+    }
+
+    public BasePredictionAdapter getAdapter() {
+        return adapter;
+    }
+
+    public void setAdapter(BasePredictionAdapter adapter) {
+        this.adapter = adapter;
+    }
 }
