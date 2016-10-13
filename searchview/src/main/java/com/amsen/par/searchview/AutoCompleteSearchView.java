@@ -8,7 +8,6 @@ import android.support.v7.view.ContextThemeWrapper;
 import android.support.v7.widget.SearchView;
 import android.util.AttributeSet;
 import android.util.Xml;
-import android.view.Gravity;
 import android.view.ViewGroup;
 import android.view.inputmethod.EditorInfo;
 import android.view.inputmethod.InputMethodManager;
@@ -17,9 +16,8 @@ import android.widget.ProgressBar;
 
 import com.amsen.par.searchview.prediction.OnPredictionClickListener;
 import com.amsen.par.searchview.prediction.Prediction;
-import com.amsen.par.searchview.prediction.adapter.DefaultPredictionHolder;
-import com.amsen.par.searchview.prediction.view.BasePredictionPopupWindow;
 import com.amsen.par.searchview.prediction.view.DefaultPredictionPopupWindow;
+import com.amsen.par.searchview.prediction.view.PredictionPopupWindow;
 import com.amsen.par.searchview.util.ViewUtils;
 
 import org.xmlpull.v1.XmlPullParser;
@@ -37,7 +35,7 @@ public class AutoCompleteSearchView extends SearchView {
     private Activity activity;
     private ViewGroup appBar;
     private ProgressBar progressBar;
-    private BasePredictionPopupWindow popup;
+    private PredictionPopupWindow popup;
     private OnPredictionClickListener onPredictionClickListener;
     private OnQueryTextListener externalOnQueryTextListener;
     private OnCloseListener externalOnCloseListener;
@@ -121,9 +119,9 @@ public class AutoCompleteSearchView extends SearchView {
         hideProgressBar();
     }
 
-    public void setPredictionPopupWindow(BasePredictionPopupWindow popup) {
+    public void setPredictionPopupWindow(PredictionPopupWindow popup) {
         if (useDefaultPredictionPopupWindow)
-            throw new RuntimeException("You are using the builtin popup, declare in XML with app:useDefaultPredictionPopupWindow=false or with AutoCompleteSearchView.useDefaultPredictionPopupWindow(false)");
+            throw new RuntimeException("You are using the builtin popup, call setUseDefaultPredictionPopupWindow(false)");
 
         this.popup = popup;
     }
@@ -185,7 +183,7 @@ public class AutoCompleteSearchView extends SearchView {
                 if (!useDefaultPredictionPopupWindow)
                     throw new RuntimeException("You have declared to not use the default popup, you need to call setPredictionPopupWindow with your instance");
 
-                popup = new DefaultPredictionPopupWindow<DefaultPredictionHolder>(getContext());
+                popup = new DefaultPredictionPopupWindow(getContext(), appBar);
 
                 if (onPredictionClickListener != null) {
                     popup.setOnPredictionClickListener(onPredictionClickListener);
@@ -221,11 +219,7 @@ public class AutoCompleteSearchView extends SearchView {
             throw new RuntimeException("Could not automatically find the appBar (Toolbar/ActionBar/Etc), supply it yourself via AutoCompleteSearchView.setAppBar or expect major errors, this is probably due to subclassing the Toolbar/ActionBar or using a 3rd party one");
 
         if (attached) {
-            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
-                popup.showAtLocation(appBar, Gravity.NO_GRAVITY, 0, (int) (appBar.getHeight() + statusBarHeight));
-            } else {
-                popup.showAsDropDown(appBar);
-            }
+            popup.show();
         }
     }
 
@@ -246,7 +240,7 @@ public class AutoCompleteSearchView extends SearchView {
             popup.setOnPredictionClickListener(listener);
     }
 
-    public BasePredictionPopupWindow getPopup() {
+    public PredictionPopupWindow getPopup() {
         return popup;
     }
 

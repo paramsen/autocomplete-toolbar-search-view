@@ -11,4 +11,6 @@ import java.util.List;
 public interface PredictionPopupWindow {
     void applyPredictions(List<Prediction> predictions);
     void setOnPredictionClickListener(OnPredictionClickListener listener);
+    void dismiss();
+    void show();
 }

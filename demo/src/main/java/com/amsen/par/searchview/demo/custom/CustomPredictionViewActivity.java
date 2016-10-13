@@ -14,6 +14,7 @@ import com.amsen.par.searchview.demo.R;
 import com.amsen.par.searchview.demo.api.MockApi;
 import com.amsen.par.searchview.prediction.Prediction;
 import com.amsen.par.searchview.prediction.view.DefaultPredictionPopupWindow;
+import com.amsen.par.searchview.util.ViewUtils;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -58,7 +59,7 @@ public class CustomPredictionViewActivity extends AppCompatActivity {
         searchView = (AutoCompleteSearchView) searchViewItem.getActionView();
         searchView.setUseDefaultProgressBar(true);
         searchView.setUseDefaultPredictionPopupWindow(false);
-        searchView.setPredictionPopupWindow(new DefaultPredictionPopupWindow<CustomPredictionViewHolder>(this, new CustomPredictionAdapter()));
+        searchView.setPredictionPopupWindow(new DefaultPredictionPopupWindow(this, new CustomPredictionAdapter(), ViewUtils.findActionBar(this)));
 
         searchView.setOnPredictionClickListener((position, prediction) -> {
             callToActionView.setVisibility(View.GONE);
