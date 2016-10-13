@@ -13,7 +13,6 @@ import com.amsen.par.searchview.R;
 import com.amsen.par.searchview.prediction.adapter.PredictionHolder;
 
 import static android.view.ViewGroup.LayoutParams.MATCH_PARENT;
-import static android.view.ViewGroup.LayoutParams.WRAP_CONTENT;
 
 /**
  * @author Pär Amsen 2016

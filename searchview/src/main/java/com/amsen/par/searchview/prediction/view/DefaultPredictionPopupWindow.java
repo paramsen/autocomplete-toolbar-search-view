@@ -5,6 +5,7 @@ import android.support.annotation.IntegerRes;
 import android.support.annotation.LayoutRes;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.widget.FrameLayout;
 
 import com.amsen.par.searchview.R;
 import com.amsen.par.searchview.prediction.OnPredictionClickListener;
@@ -20,21 +21,18 @@ import java.util.List;
  */
 public class DefaultPredictionPopupWindow<T extends PredictionHolder> extends BasePredictionPopupWindow {
     private RecyclerView recycler;
+    private FrameLayout emptyContainer;
     private BasePredictionAdapter adapter;
 
     public DefaultPredictionPopupWindow(Context context) {
-        super(context, R.layout.view_popup);
-
-        recycler = (RecyclerView) getContentView().findViewById(R.id.recycler);
-        adapter = new DefaultPredictionAdapter();
-        recycler.setLayoutManager(new LinearLayoutManager(context, LinearLayoutManager.VERTICAL, false));
-        recycler.setAdapter(adapter);
+        this(context, new DefaultPredictionAdapter());
     }
 
     public DefaultPredictionPopupWindow(Context context, BasePredictionAdapter<?> adapter) {
         super(context, R.layout.view_popup);
 
         recycler = (RecyclerView) getContentView().findViewById(R.id.recycler);
+        emptyContainer = (FrameLayout) getContentView().findViewById(R.id.emptyContainer);
         this.adapter = adapter;
         recycler.setLayoutManager(new LinearLayoutManager(context, LinearLayoutManager.VERTICAL, false));
         recycler.setAdapter(adapter);
@@ -54,15 +52,15 @@ public class DefaultPredictionPopupWindow<T extends PredictionHolder> extends Ba
         return recycler;
     }
 
-    public void setRecycler(RecyclerView recycler) {
-        this.recycler = recycler;
-    }
-
     public BasePredictionAdapter getAdapter() {
         return adapter;
     }
 
     public void setAdapter(BasePredictionAdapter adapter) {
         this.adapter = adapter;
+    }
+
+    public FrameLayout getEmptyContainer() {
+        return emptyContainer;
     }
 }
