@@ -1,5 +1,9 @@
 # AutocompleteSearchView for the Appcompat Toolbar
 
+<p align="center">
+  <img src="https://github.com/paramsen/autocomplete-toolbar-search-view/blob/master/preview.gif" alt="Preview animation"/>
+</p>
+
 ## Demo
 
 [Demo on Google Play][1]  
